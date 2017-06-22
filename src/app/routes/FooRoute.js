@@ -1,7 +1,6 @@
 import { provideHooks } from 'redial'
 import { connect } from 'react-redux'
 import * as fooActions from 'app/actions/foo.actions'
-import { get } from 'app/utils'
 
 // Example hooks
 @provideHooks({
@@ -11,7 +10,7 @@ import { get } from 'app/utils'
   defer: ({ dispatch }) => dispatch(fooActions.fooGetClientOnly()),
 })
 @connect(state => ({
-  foo: get('foo.data')(state),
+  foo: state.get('foo').get('data'),
 }))
 export default class FooRoute extends React.Component {
   render() {

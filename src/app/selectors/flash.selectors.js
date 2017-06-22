@@ -1,7 +1,7 @@
+import { List } from 'immutable'
 import { createSelector } from 'reselect'
 import { head } from 'ramda'
-import { get } from 'app/utils'
 
-export const getMessages = get('flash.messages', [])
+export const getMessages = (state) => state?state.get('flash').get('messages'):List([])
 
-export const getNextMessage = createSelector([ getMessages ], head)
+export const getNextMessage = createSelector([ getMessages ], (messages) => head(messages.toArray()))

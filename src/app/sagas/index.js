@@ -31,6 +31,6 @@ export function * takeFlashMessages() {
 
 export default function * rootSaga() {
   const nextFlash = yield select(flashSelectors.getNextMessage)
-  yield fork(timeoutRemoveFlash, nextFlash)
+  yield fork(timeoutRemoveFlash, nextFlash?nextFlash.toJS():undefined)
   yield fork(takeFlashMessages)
 }

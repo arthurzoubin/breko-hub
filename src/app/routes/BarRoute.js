@@ -2,14 +2,13 @@ import { provideHooks } from 'redial'
 import { connect } from 'react-redux'
 import DocumentMeta from 'react-helmet'
 import * as barActions from 'app/actions/bar.actions'
-import { get } from 'app/utils'
 
 @provideHooks({
   // return the promise for server side trigger
   defer: ({ dispatch }) => dispatch(barActions.apiFetch()),
 })
 @connect(state => ({
-  bar: get('bar.data')(state),
+  bar: state.get('bar').get('data'),
 }))
 export default class BarRoute extends React.Component {
   render() {

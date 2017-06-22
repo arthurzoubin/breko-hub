@@ -17,6 +17,6 @@ function transferFlashMessages(ctx) {
     clientStore.getState()
   )
   if (nextFlashMessage) {
-    ctx.addFlash(nextFlashMessage.message, nextFlashMessage.type)
+    ctx.addFlash(nextFlashMessage.get('message'), nextFlashMessage.get('type'))
   }
 }

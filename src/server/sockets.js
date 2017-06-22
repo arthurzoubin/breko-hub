@@ -1,3 +1,4 @@
+import { fromJS } from 'immutable'
 import Socket from 'socket.io'
 import { inServerViaSocketIO, outServerViaSocketIO } from 'redux-via-socket.io'
 import rootReducer from 'app/reducers'
@@ -13,7 +14,7 @@ export default function sockets(server) {
   const socketsStore = makeCreateStore([
     ...middleware,
     outServerViaSocketIO(socketServer),
-  ])(rootReducer, {})
+  ])(rootReducer, fromJS({}))
 
   socketServer.on('connection', socket => {
     log('New connection made with id', socket.id)

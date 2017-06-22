@@ -1,3 +1,4 @@
+import { fromJS } from 'immutable'
 import chai, { expect } from 'chai'
 import koa from 'koa'
 import sinon from 'sinon'
@@ -23,7 +24,7 @@ const helpers = {
     clone.middleware = lodash.clone(app.middleware)
     return clone
   },
-  createStore(initialState={}) {
+  createStore(initialState=fromJS({})) {
     return makeCreateStore([
       thunkMiddleware,
       promiseMiddleware(),

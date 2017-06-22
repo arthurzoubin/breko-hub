@@ -1,12 +1,13 @@
+import { fromJS } from 'immutable'
 import { barReducers } from './bar.reducers'
 import { API_FETCH } from 'app/actions/bar.actions'
 
 describe('Bar Reducers', ()=> {
-  const initialState = {
+  const initialState = fromJS({
     isPending: false,
     error: false,
     data: [],
-  }
+  })
   const irrelevantAction = { type: 'IRRELEVANT_ACTION' }
 
   it('returns the initialState when no state', () => {
@@ -14,11 +15,11 @@ describe('Bar Reducers', ()=> {
   })
 
   describe('API_FETCH_PENDING', ()=> {
-    const stateBeforeDispatch = {
+    const stateBeforeDispatch = fromJS({
       data: 'test dirty data',
       error: new Error('test previous state error'),
-      isPending: !initialState.isPending,
-    }
+      isPending: !initialState.get('isPending'),
+    })
 
     it('sets initialState with isPending=true', ()=> {
       const apiFetchPendingAction = {
@@ -26,19 +27,16 @@ describe('Bar Reducers', ()=> {
       }
       expect(
         barReducers(stateBeforeDispatch, apiFetchPendingAction)
-      ).to.eql({
-        ...initialState,
-        isPending: true,
-      })
+      ).to.eql(stateBeforeDispatch.set('isPending', true))
     })
   })
 
   describe('API_FETCH_REJECTED', ()=> {
-    const stateBeforeDispatch = {
+    const stateBeforeDispatch = fromJS({
       data: 'test dirty data',
       error: new Error('test previous state error'),
       isPending: !initialState.isPending,
-    }
+    })
 
     it('sets initialState with payload as error', ()=> {
       const apiFetchRejectedAction = {
@@ -48,19 +46,16 @@ describe('Bar Reducers', ()=> {
       }
       expect(
         barReducers(stateBeforeDispatch, apiFetchRejectedAction)
-      ).to.eql({
-        ...initialState,
-        error: apiFetchRejectedAction.payload,
-      })
+      ).to.eql(stateBeforeDispatch.merge(initialState).set('error', apiFetchRejectedAction.payload))
     })
   })
 
   describe('API_FETCH_FULFILLED', ()=> {
-    const stateBeforeDispatch = {
+    const stateBeforeDispatch = fromJS({
       data: 'test dirty data',
       error: new Error('test previous state error'),
       isPending: !initialState.isPending,
-    }
+    })
 
     it('sets initialState with payload as data', ()=> {
       const apiFetchFulfilledAction = {
@@ -72,10 +67,7 @@ describe('Bar Reducers', ()=> {
       }
       expect(
         barReducers(stateBeforeDispatch, apiFetchFulfilledAction)
-      ).to.eql({
-        ...initialState,
-        data: apiFetchFulfilledAction.payload.bar,
-      })
+      ).to.eql(stateBeforeDispatch.merge(initialState).set('data', apiFetchFulfilledAction.payload.bar))
     })
   })
 })

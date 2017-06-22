@@ -1,3 +1,4 @@
+import { fromJS } from 'immutable'
 import WrappedFlashMessages, { WrappedComponent as FlashMessages } from './FlashMessages'
 import Msg from './Msg'
 import { shallow, mount } from 'enzyme'
@@ -7,7 +8,7 @@ import styles from './Msg.module.scss'
 
 describe('FlashMessages Component', function() {
   beforeEach(()=> {
-    this.messages = makeMessages()
+    this.messages = makeMessages().toJS()
     this.tree = shallow(<FlashMessages />)
   })
 
@@ -35,7 +36,7 @@ describe('FlashMessages Component', function() {
       )
     })
 
-    it('renders a Msg component for each message in props', ()=> {
+    it('renders a Msg componentfromJS for each message in props', ()=> {
       expect(this.tree.find(Msg)).to.have.length(this.messages.length)
       this.messages.forEach(msg => {
         const item = this.tree.find({ msg })
@@ -57,10 +58,10 @@ describe('FlashMessages Component', function() {
 
 describe('Connected FlashMessages', function() {
   beforeEach(()=> {
-    this.messages = makeMessages()
-    this.store = helpers.createStore({
+    this.messages = makeMessages().toJS()
+    this.store = helpers.createStore(fromJS({
       flash: { messages: this.messages },
-    })
+    }))
     sinon.stub(this.store, 'dispatch')
     this.tree = mount(
       <Provider store={this.store}>
@@ -86,7 +87,7 @@ describe('Connected FlashMessages', function() {
   })
 })
 
-const makeMessages = () => [
+const makeMessages = () => fromJS([
   {
     id: '1',
     message: 'test message',
@@ -100,4 +101,4 @@ const makeMessages = () => [
     message: 'more test message',
     type: 'info',
   },
-]
+])

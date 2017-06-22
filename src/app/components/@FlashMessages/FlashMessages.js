@@ -8,7 +8,7 @@ import Msg from './Msg'
 const { PropTypes } = React
 
 @connect(state => ({
-  messages: flashSelectors.getMessages(state),
+  messages: flashSelectors.getMessages(state).toJS(),
 }), { removeMessage })
 export default class FlashMessages extends React.Component {
   static propTypes = {
